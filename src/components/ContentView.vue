@@ -54,28 +54,28 @@
 
 <script setup>
 import { ref, defineProps, defineEmits, onMounted, onUnmounted, watch } from "vue"
-import { getImgUrl, runPngAnimation } from "@/utils/index"
+import { getStaticFilePath, runPngAnimation } from "@/utils/index"
 
-const floorImg = getImgUrl("../assets/imgs/floor.png")
-const dialogPng = getImgUrl("../assets/imgs/dialog.png")
+const floorImg = getStaticFilePath("../assets/imgs/floor.png")
+const dialogPng = getStaticFilePath("../assets/imgs/dialog.png")
 
-const gateback = getImgUrl("../assets/imgs/gate3_back.png")
-const gatelogo = getImgUrl("../assets/imgs/gate3_logo.png")
-const gateVector1 = getImgUrl("../assets/imgs/gate3_Vector_1.png")
-const gateVector2 = getImgUrl("../assets/imgs/gate3_Vector_2.png")
-const gateVector3 = getImgUrl("../assets/imgs/gate3_Vector_3.png")
+const gateback = getStaticFilePath("../assets/imgs/gate3_back.png")
+const gatelogo = getStaticFilePath("../assets/imgs/gate3_logo.png")
+const gateVector1 = getStaticFilePath("../assets/imgs/gate3_Vector_1.png")
+const gateVector2 = getStaticFilePath("../assets/imgs/gate3_Vector_2.png")
+const gateVector3 = getStaticFilePath("../assets/imgs/gate3_Vector_3.png")
 
-const starlandBack = getImgUrl("../assets/imgs/starland_back.png")
-const starlandLogo = getImgUrl("../assets/imgs/starland_logo.png")
-const starlandVector1 = getImgUrl("../assets/imgs/starland_Vector_1.png")
-const starlandVector2 = getImgUrl("../assets/imgs/starland_Vector_2.png")
-const starlandVector3 = getImgUrl("../assets/imgs/starland_Vector_3.png")
+const starlandBack = getStaticFilePath("../assets/imgs/starland_back.png")
+const starlandLogo = getStaticFilePath("../assets/imgs/starland_logo.png")
+const starlandVector1 = getStaticFilePath("../assets/imgs/starland_Vector_1.png")
+const starlandVector2 = getStaticFilePath("../assets/imgs/starland_Vector_2.png")
+const starlandVector3 = getStaticFilePath("../assets/imgs/starland_Vector_3.png")
 
-const datebotBack = getImgUrl("../assets/imgs/datebot_back.png")
-const datebotLogo = getImgUrl("../assets/imgs/datebot_logo.png")
-const datebotVector1 = getImgUrl("../assets/imgs/datebot_Vector_1.png")
-const datebotVector2 = getImgUrl("../assets/imgs/datebot_Vector_2.png")
-const datebotVector3 = getImgUrl("../assets/imgs/datebot_Vector_3.png")
+const datebotBack = getStaticFilePath("../assets/imgs/datebot_back.png")
+const datebotLogo = getStaticFilePath("../assets/imgs/datebot_logo.png")
+const datebotVector1 = getStaticFilePath("../assets/imgs/datebot_Vector_1.png")
+const datebotVector2 = getStaticFilePath("../assets/imgs/datebot_Vector_2.png")
+const datebotVector3 = getStaticFilePath("../assets/imgs/datebot_Vector_3.png")
 
 const props = defineProps({ keyword: String, pageType: Number, enterStatus: Boolean })
 const emits = defineEmits(["pageChage"])
@@ -85,7 +85,7 @@ const isHoverR = ref(false)
 
 const setConfig = {
   gate: {
-    protagonist: getImgUrl("../assets/imgs/spider_1/spider1.png"),
+    protagonist: getStaticFilePath("../assets/imgs/spider_1/spider1.png"),
     animation: "spider_1",
     speed: 1,
     step: 26,

@@ -2,7 +2,7 @@
   <div class="home" ref="homeDom">
     <img class="backimg" alt="back" v-lazy="homeback">
     <article>
-      <img id="cube" alt="matapace" ref="pngDom" src="~@/assets/imgs/homeAnimation/animation1.png">
+      <img id="cube" alt="matapace" ref="pngDom" src="/src/assets/imgs/homeAnimation/animation1.png">
       <div class="line"></div>
       <img class="spider" alt="spider" v-lazy="homedislogo">
       <div class="description">web3.0 professional platform focusing on providing user growth and market development, which makes everyone an undefined market pioneer</div>
@@ -17,13 +17,13 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue"
-import { runPngAnimation } from "@/utils/index"
+import { runPngAnimation, getStaticFilePath } from "@/utils/index"
 
-import homeback from "@/assets/imgs/homeback.webp"
-import homedislogo from "@/assets/imgs/homedislogo.webp"
-import home_Vector_1 from "@/assets/imgs/home_Vector_1.webp"
-import home_Vector_2 from "@/assets/imgs/home_Vector_2.webp"
-import home_Vector_3 from "@/assets/imgs/home_Vector_3.webp"
+import homeback from "/src/assets/imgs/homeback.webp"
+import homedislogo from "/src/assets/imgs/homedislogo.webp"
+import home_Vector_1 from "/src/assets/imgs/home_Vector_1.webp"
+import home_Vector_2 from "/src/assets/imgs/home_Vector_2.webp"
+import home_Vector_3 from "/src/assets/imgs/home_Vector_3.webp"
 
 const homeDom = ref(null)
 const pngDom = ref(null)
