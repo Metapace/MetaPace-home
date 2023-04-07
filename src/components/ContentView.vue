@@ -1,7 +1,7 @@
 <template>
   <article>
-    <div class="protagonist" @click="logohandle"></div>
-    <img class="spiderImg" ref="pngDom" alt="" v-lazy="config.protagonist">
+    <div class="protagonist spiderMove" @click="logohandle"></div>
+    <img class="spiderImg spiderMove" ref="pngDom" alt="" v-lazy="config.protagonist">
     <img class="floorImg" alt="" v-lazy="floorImg" :style="{ bottom: `${config.floorBottom}%` }">
     <img class="backimg" alt="" v-lazy="config.backfloor">
     <button
@@ -40,13 +40,24 @@
       <img v-for="(item, index) in config.vector" :key="index" alt="vector" v-lazy="item">
     </div>
   </footer>
+
+  <Transition
+    enter-active-class="animate__animated animate__tada"
+    leave-active-class="animate__animated animate__zoomOut"
+  >
+    <div v-if="dialog" class="dialog" @click="dialogClose">
+      <input v-model="dialgoText" />
+      <img alt="" v-lazy="dialogPng">
+    </div>
+  </Transition>
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, onMounted, onUnmounted } from "vue"
+import { ref, defineProps, defineEmits, onMounted, onUnmounted, watch } from "vue"
 import { getImgUrl, runPngAnimation } from "@/utils/index"
 
 const floorImg = getImgUrl("../assets/imgs/floor.png")
+const dialogPng = getImgUrl("../assets/imgs/dialog.png")
 
 const gateback = getImgUrl("../assets/imgs/gate3_back.png")
 const gatelogo = getImgUrl("../assets/imgs/gate3_logo.png")
@@ -66,7 +77,7 @@ const datebotVector1 = getImgUrl("../assets/imgs/datebot_Vector_1.png")
 const datebotVector2 = getImgUrl("../assets/imgs/datebot_Vector_2.png")
 const datebotVector3 = getImgUrl("../assets/imgs/datebot_Vector_3.png")
 
-const props = defineProps({ keyword: String, pageType: Number })
+const props = defineProps({ keyword: String, pageType: Number, enterStatus: Boolean })
 const emits = defineEmits(["pageChage"])
 const config = ref(null)
 const isHoverL = ref(false)
@@ -92,8 +103,11 @@ const setConfig = {
   },
   starland: {
     protagonist: null,
-    animation: "spider_2",
-    floorBottom: 30,
+    animation: ["spider_2_1", "spider_2_2", "spider_2_1"],
+    speed: [0.25, 1.1, 0.4],
+    delay: [2.5, 1.1, 10],
+    step: [8, 35, 8],
+    floorBottom: -30,
     spiderSite: { top: "3%", left: "0" },
     backfloor: starlandBack,
     left: true,
@@ -108,8 +122,8 @@ const setConfig = {
   datebot: {
     protagonist: null,
     animation: "spider_3",
-    speed: 2,
-    step: 39,
+    speed: 2.5,
+    step: 50,
     floorBottom: 30,
     spiderSite: { top: "3%", left: "0" },
     backfloor: datebotBack,
@@ -141,22 +155,126 @@ function btnHandle(step) {
   emits("pageChage", goPage)
 }
 
+watch(() => props.enterStatus, async (val) => {
+  if (!val) return
+  let options = setConfig[props.keyword]
+  const spiderMoveDom = document.querySelectorAll(".spiderMove")
+  async function secondRun() {
+    let runArr = options.delay.map((item, index) => {
+      return () => new Promise((resolve) => {
+        timer.value && clearInterval(timer.value);
+        timer.value = runPngAnimation(pngDom.value, `../assets/imgs/${(options.animation)[index]}/spider`, (options.speed)[index], (options.step)[index]);
+        if (index === 0) {
+          spiderMoveDom.forEach((item) => {
+            item.classList.add("leftin")
+            item.classList.remove("rightout")
+          })
+        }
+
+        if (index === 1) {
+          spiderMoveDom.forEach((item) => {
+            item.classList.remove("leftin")
+            item.classList.remove("rightout")
+          })
+        }
+
+        if (index === 2) {
+          spiderMoveDom.forEach((item) => {
+            item.classList.remove("lfetInto")
+            item.classList.add("rightout")
+          })
+        }
+
+        (delayTimer.value)[index] && clearTimeout((delayTimer.value)[index]);
+        (delayTimer.value)[index] = setTimeout(resolve, item * 1000);
+      })
+    })
+
+    for(let i = 0; i < runArr.length; i++) {
+      await runArr[i]()
+      if (i === 2) i = -1
+    }
+  }
+  switch (props.pageType) {
+    case 1:
+      spiderMoveDom.forEach((item) => {
+        item.classList.remove("enterInto")
+      })
+      timer.value = runPngAnimation(pngDom.value, `../assets/imgs/${options.animation}/spider`, options.speed, options.step)
+      break
+    case 2:
+      secondRun()
+      break
+    case 3:
+      timer.value = runPngAnimation(pngDom.value, `../assets/imgs/${options.animation}/spider`, options.speed, options.step)
+      break
+  }
+})
+
 const pngDom = ref(null)
 const timer = ref(null)
+const delayTimer = ref([])
+let firstTimer = ref(null)
 
-onMounted(() => {
-  let options = setConfig[props.keyword]
+onMounted(async () => {
   if (timer.value) clearInterval(timer.value)
-  timer.value = runPngAnimation(pngDom.value, `../assets/imgs/${options.animation}/spider`, options.speed, options.step)
+  if (props.pageType === 1) {
+    const spiderMoveDom = document.querySelectorAll(".spiderMove")
+    spiderMoveDom.forEach((item) => {
+      item.classList.remove("enterInto")
+      item.classList.add("enterInto")
+    })
+  }
 })
 
 onUnmounted(() => {
   timer.value && clearInterval(timer.value)
+  firstTimer.value && clearTimeout(firstTimer.value)
+  delayTimer.value.length && delayTimer.value.forEach((item) => clearTimeout(item))
+  delayTimer.value = []
   timer.value = null
+  firstTimer.value = null
 })
 
+const dialog = ref(false)
+const dialgoText = ref("")
+const dialogTimer = ref(null)
+
+watch(
+  () => dialog,
+  (val) => {
+    if (!val) {
+      clearInterval(dialogTimer.value)
+      dialogTimer.value = null
+      dialgoText.value = ""
+    }
+  }
+)
+
 function logohandle() {
-  alert("123456")
+  if (props.pageType === 1) {
+    window.location.href = "https://gate-3.io/"
+  } else {
+    dialog.value = true
+    dialogTimer.value && clearInterval(dialogTimer.value)
+    let str = "coming soon..."
+    let i = 0
+    dialogTimer.value = setInterval(() => {
+      dialgoText.value += str[i]
+      i++
+      if (i >= str.length) {
+        clearInterval(dialogTimer.value)
+        dialogTimer.value = null
+      }
+    }, 200)
+  }
+}
+
+function dialogClose() {
+  dialog.value = false
+  clearInterval(dialogTimer.value)
+  dialogTimer.value = null
+  dialgoText.value = ""
 }
 
 </script>
@@ -173,9 +291,11 @@ article {
     width: 3.7rem;
     border-radius: 50%;
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
   }
   .spiderImg {
     position: absolute;
@@ -251,6 +371,73 @@ footer {
     margin: 0 6.5px;
     width: 14px;
     height: 14px;
+  }
+}
+
+.enterInto {
+  animation: enterIn 0.6s ease 0.4s;
+}
+
+.leaveOut {
+  animation: enterIn 0.6s ease 0.4s reverse;
+}
+
+@keyframes enterIn {
+  0% {
+    transform: translateX(-20vw) scale(0);
+  }
+  100% {
+    transform: translate(0) scale(1);
+  }
+}
+
+.leftin {
+  animation: spiderLeftInto 2.4s linear;
+}
+
+@keyframes spiderLeftInto {
+  0% { transform: translateX(-60vw); }
+  100% { transform: translateX(0); }
+}
+
+.rightout {
+  animation: spiderRightGoOut 10s linear;
+}
+
+@keyframes spiderRightGoOut {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100vw); }
+}
+
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(6px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2.3rem;
+  box-sizing: border-box;
+
+  input {
+    font-weight: 700;
+    font-size: 0.7rem;
+    line-height: 0.7rem;
+    text-align: center;
+    color: #fff;
+    font-family: "Outfit";
+    background-color: transparent;
+    outline: none;
+    border: none;
+  }
+
+  img {
+    width: 10rem;
+    height: 5rem;
   }
 }
 </style>

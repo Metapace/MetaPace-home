@@ -2,7 +2,7 @@
   <div class="home" ref="homeDom">
     <img class="backimg" alt="back" v-lazy="homeback">
     <article>
-      <img id="cube" alt="matapace" ref="pngDom" src="~@/assets/imgs/homeAnimation/animation (1).png">
+      <img id="cube" alt="matapace" ref="pngDom" src="~@/assets/imgs/homeAnimation/animation1.png">
       <div class="line"></div>
       <img class="spider" alt="spider" v-lazy="homedislogo">
       <div class="description">web3.0 professional platform focusing on providing user growth and market development, which makes everyone an undefined market pioneer</div>

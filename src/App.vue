@@ -6,16 +6,49 @@
       <home-view class="wrap" v-if="pageType === 0"></home-view>
     </Transition>
 
-    <Transition name="fade" :enter-active-class="intoClassName">
-      <gate-three class="wrap" v-if="pageType === 1" :pageType="pageType" @pageChage="pageTypeChange"></gate-three>
+    <Transition
+      name="fade"
+      :enter-active-class="intoClassName"
+      @after-enter="onAfterEnter"
+      @before-leave="onBeforeLeave"
+    >
+      <gate-three
+        class="wrap"
+        v-if="pageType === 1"
+        :enterStatus="enterStatus[0]"
+        :pageType="pageType"
+        @pageChage="pageTypeChange"
+      ></gate-three>
     </Transition>
     
-    <Transition name="fade" :enter-active-class="intoClassName">
-      <starland-view class="wrap" v-if="pageType === 2" :pageType="pageType" @pageChage="pageTypeChange"></starland-view>
+    <Transition
+      name="fade"
+      :enter-active-class="intoClassName"
+      @after-enter="onAfterEnter"
+      @before-leave="onBeforeLeave"
+    >
+      <starland-view
+        class="wrap"
+        v-if="pageType === 2"
+        :enterStatus="enterStatus[1]"
+        :pageType="pageType"
+        @pageChage="pageTypeChange"
+      ></starland-view>
     </Transition>
 
-    <Transition name="fade" :enter-active-class="intoClassName">
-      <datebot-view class="wrap" v-if="pageType === 3" :pageType="pageType" @pageChage="pageTypeChange"></datebot-view>
+    <Transition
+      name="fade"
+      :enter-active-class="intoClassName"
+      @after-enter="onAfterEnter"
+      @before-leave="onBeforeLeave"
+    >
+      <datebot-view
+        class="wrap"
+        v-if="pageType === 3"
+        :enterStatus="enterStatus[2]"
+        :pageType="pageType"
+        @pageChage="pageTypeChange"
+      ></datebot-view>
     </Transition>
   </div>
 </template>
@@ -29,13 +62,27 @@ import GateThree from "@/views/GateThree.vue"
 import StarlandView from "@/views/StarlandView.vue"
 import DatebotView from "@/views/DatebotView.vue"
 
-const pageType = ref(3);
+const pageType = ref(0);
+const oldPageType = ref(0);
+const enterStatus = ref([false, false, false])
+const leaveStatus = ref([false, false, false])
 const intoClassName = ref("fade-enter-active-right")
 function pageTypeChange(type) {
   intoClassName.value = type >= pageType.value ? "fade-enter-active-right" : "fade-enter-active-left"
+  if (type) enterStatus.value[type - 1] = false
   pageType.value = type
 }
 
+function onAfterEnter() {
+  if (pageType.value) enterStatus.value[pageType.value - 1] = true
+  leaveStatus.value = [false, false, false]
+}
+
+// 出场动画暂时不要了，草，太难了
+function onBeforeLeave() {
+  if (oldPageType.value) leaveStatus.value[oldPageType.value - 1] = true
+  oldPageType.value = pageType.value
+}
 </script>
 
 <style lang="scss" scoped>

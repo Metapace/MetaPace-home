@@ -22,7 +22,7 @@ function goProducts() {
 }
 
 function goDocs() {
-
+  window.location.href = "https://stargate-doc.gitbook.io/product-docs/why-metapace"
 }
 </script>
 

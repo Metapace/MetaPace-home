@@ -4,7 +4,7 @@ export function getImgUrl(path) {
 
 export function runPngAnimation(ele, url, speed = 0, step = 0) {
   if (!ele) return
-  let i = 0
+  let i = 1
   let timer = setInterval(() => {
     i += 1
     if (i >= step + 1) i = 1
