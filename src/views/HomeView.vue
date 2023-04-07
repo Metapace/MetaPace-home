@@ -1,0 +1,97 @@
+<template>
+  <div class="home" ref="homeDom">
+    <img class="backimg" alt="back" v-lazy="homeback">
+    <article>
+      <img id="cube" alt="matapace" v-lazy="cubePage">
+      <div class="line"></div>
+      <img class="spider" alt="spider" v-lazy="homedislogo">
+      <div class="description">web3.0 professional platform focusing on providing user growth and market development, which makes everyone an undefined market pioneer</div>
+      <footer>
+        <img alt="vector" v-lazy="home_Vector_1">
+        <img alt="vector" v-lazy="home_Vector_2">
+        <img alt="vector" v-lazy="home_Vector_3">
+      </footer>
+    </article>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue"
+
+import homeback from "@/assets/imgs/homeback.webp"
+import cubePage from "@/assets/imgs/homeAnimation/animation (1).webp"
+import homedislogo from "@/assets/imgs/homedislogo.webp"
+import home_Vector_1 from "@/assets/imgs/home_Vector_1.webp"
+import home_Vector_2 from "@/assets/imgs/home_Vector_2.webp"
+import home_Vector_3 from "@/assets/imgs/home_Vector_3.webp"
+
+const homeDom = ref(null)
+
+</script>
+
+<style lang="scss" scoped>
+.home {
+  background-color: #111;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: flex-end;
+
+  .backimg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+  }
+
+  article {
+    width: 9.0196rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.580rem;
+
+    #cube {
+      width: 5.3966rem;
+      height: 3.407rem;
+    }
+
+    .line {
+      width: 100%;
+      height: 0.5px;
+      margin-top: 0.325rem;
+      background-color: #fff;
+    }
+
+    .description {
+      width: 6.2rem;
+      text-align: center;
+      font-family: 'Pixel Arial 11';
+      font-style: normal;
+      font-weight: 700;
+      line-height: 0.396rem;
+      font-size: 0.2rem;
+      opacity: 0.8;
+      color: #fff;
+      margin-top: -0.2545rem;
+    }
+
+    footer {
+      margin-top: 0.1689rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 0.27rem;
+        height: 0.27rem;
+        margin: 0 0.132rem;
+      }
+    }
+  }
+}
+</style>
