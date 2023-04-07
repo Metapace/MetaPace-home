@@ -1,8 +1,7 @@
 <template>
   <article>
-    <div class="protagonist" @click="logohandle">
-      <img ref="pngDom" alt="" v-lazy="config.protagonist" :style="config.backPosition">
-    </div>
+    <div class="protagonist" @click="logohandle"></div>
+    <img class="spiderImg" ref="pngDom" alt="" v-lazy="config.protagonist">
     <img class="floorImg" alt="" v-lazy="floorImg" :style="{ bottom: `${config.floorBottom}%` }">
     <img class="backimg" alt="" v-lazy="config.backfloor">
     <button
@@ -76,7 +75,6 @@ const isHoverR = ref(false)
 const setConfig = {
   gate: {
     protagonist: getImgUrl("../assets/imgs/spider_1/spider1.png"),
-    backPosition: { left: "-150%", top: "-95%" },
     animation: "spider_1",
     speed: 1,
     step: 26,
@@ -147,7 +145,7 @@ const timer = ref(null)
 onMounted(() => {
   let options = setConfig[props.keyword]
   if (timer.value) clearInterval(timer.value)
-  timer.value = runPngAnimation(pngDom.value, `../assets/imgs/${options.animation}/spider`, options.speed, options.step)
+  // timer.value = runPngAnimation(pngDom.value, `../assets/imgs/${options.animation}/spider`, options.speed, options.step)
 })
 
 onUnmounted(() => {
@@ -169,27 +167,30 @@ article {
   flex-direction: column;
   justify-content: center;
   .protagonist {
+    height: 2.6rem;
+    width: 3.7rem;
+    border-radius: 50%;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    height: 35%;
-    width: 25%;
-    img {
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      z-index: -1;
-    }
+  }
+  .spiderImg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
   }
   .floorImg {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    z-index: -1;
+    z-index: -2;
   }
   .backimg {
-    z-index: -2;
+    z-index: -3;
   }
 
   button {
