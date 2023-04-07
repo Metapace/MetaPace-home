@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, onMounted, onUnmounted, resolveDirective } from "vue"
+import { ref, defineProps, defineEmits, onMounted, onUnmounted } from "vue"
 import { getImgUrl, runPngAnimation } from "@/utils/index"
 
 const floorImg = getImgUrl("../assets/imgs/floor.png")
@@ -108,6 +108,8 @@ const setConfig = {
   datebot: {
     protagonist: null,
     animation: "spider_3",
+    speed: 2,
+    step: 39,
     floorBottom: 30,
     spiderSite: { top: "3%", left: "0" },
     backfloor: datebotBack,
@@ -145,7 +147,7 @@ const timer = ref(null)
 onMounted(() => {
   let options = setConfig[props.keyword]
   if (timer.value) clearInterval(timer.value)
-  // timer.value = runPngAnimation(pngDom.value, `../assets/imgs/${options.animation}/spider`, options.speed, options.step)
+  timer.value = runPngAnimation(pngDom.value, `../assets/imgs/${options.animation}/spider`, options.speed, options.step)
 })
 
 onUnmounted(() => {
