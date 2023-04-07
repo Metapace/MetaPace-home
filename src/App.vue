@@ -29,7 +29,7 @@ import GateThree from "@/views/GateThree.vue"
 import StarlandView from "@/views/StarlandView.vue"
 import DatebotView from "@/views/DatebotView.vue"
 
-const pageType = ref(1);
+const pageType = ref(2);
 const intoClassName = ref("fade-enter-active-right")
 function pageTypeChange(type) {
   intoClassName.value = type >= pageType.value ? "fade-enter-active-right" : "fade-enter-active-left"

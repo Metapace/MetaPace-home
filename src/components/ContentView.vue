@@ -78,7 +78,7 @@ const setConfig = {
     animation: "spider_1",
     speed: 1,
     step: 26,
-    floorBottom: 34,
+    floorBottom: 33,
     spiderSite: { top: "3%", left: "0" },
     backfloor: gateback,
     left: false,
