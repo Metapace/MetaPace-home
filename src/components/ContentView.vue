@@ -417,7 +417,7 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 2.3rem;
+  padding-top: 1.8rem;
   box-sizing: border-box;
 
   input {

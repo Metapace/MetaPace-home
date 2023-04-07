@@ -113,7 +113,7 @@ function onBeforeLeave() {
   }
   100% {
     z-index: 2;
-    tramsform: translateX(0);
+    transform: translateX(0);
   }
 }
 
@@ -128,7 +128,7 @@ function onBeforeLeave() {
   }
   100% {
     z-index: 2;
-    tramsform: translateX(0);
+    transform: translateX(0);
   }
 }
 
