@@ -7,15 +7,15 @@
     </Transition>
 
     <Transition name="fade" :enter-active-class="intoClassName">
-      <gate-three class="wrap" v-if="pageType === 1"></gate-three>
+      <gate-three class="wrap" v-if="pageType === 1" :pageType="pageType" @pageChage="pageTypeChange"></gate-three>
     </Transition>
     
     <Transition name="fade" :enter-active-class="intoClassName">
-      <starland-view class="wrap" v-if="pageType === 2"></starland-view>
+      <starland-view class="wrap" v-if="pageType === 2" :pageType="pageType" @pageChage="pageTypeChange"></starland-view>
     </Transition>
 
     <Transition name="fade" :enter-active-class="intoClassName">
-      <datebot-view class="wrap" v-if="pageType === 3"></datebot-view>
+      <datebot-view class="wrap" v-if="pageType === 3" :pageType="pageType" @pageChage="pageTypeChange"></datebot-view>
     </Transition>
   </div>
 </template>
@@ -51,7 +51,7 @@ function pageTypeChange(type) {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -1;
+    z-index: 1;
   }
 }
 
@@ -61,10 +61,11 @@ function pageTypeChange(type) {
 
 @keyframes rightInto {
   0% {
+    z-index: 2;
     transform: translateX(100vw);
   }
   100% {
-    z-index: 1;
+    z-index: 2;
     tramsform: translateX(0);
   }
 }
@@ -75,21 +76,25 @@ function pageTypeChange(type) {
 
 @keyframes leftInto {
   0% {
+    z-index: 2;
     transform: translateX(-100vw);
   }
   100% {
-    z-index: 1;
+    z-index: 2;
     tramsform: translateX(0);
   }
 }
 
 .fade-leave-active {
-  animation: pageLeave 0.1s 0.79s;
+  animation: pageLeave 0.799s;
 }
 
 @keyframes pageLeave {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    z-index: 1;
+  }
+  100% {
+    z-index: 1;
+  }
 }
-
 </style>

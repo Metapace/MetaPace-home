@@ -2,11 +2,31 @@
   <article>
     <img class="protagonist" alt="" v-lazy="config.protagonist">
     <img class="backimg" alt="" v-lazy="config.backfloor">
-    <button class="left">
+    <button
+      class="left"
+      v-if="config.left"
+      :style="{
+        backgroundColor: isHoverL ? config.btnColor : 'transparent',
+        border: isHoverL ? 'none' : '#fff 1px solid'
+      }"
+      @mouseover="btnHover(true, 'l')"
+      @mouseout="btnHover(false, 'l')"
+      @click="btnHandle(-1)"
+    >
       <img alt="left" src="../assets/imgs/left.png">
     </button>
 
-    <button class="right">
+    <button 
+      class="right"
+      v-if="config.right" 
+      :style="{
+        backgroundColor: isHoverR ? config.btnColor : 'transparent',
+        border: isHoverR ? 'none' : '#fff 1px solid'
+      }"
+      @mouseover="btnHover(true, 'r')"
+      @mouseout="btnHover(false, 'r')"
+      @click="btnHandle(1)"
+    >
       <img alt="right" src="../assets/imgs/right.png">
     </button>
   </article>
@@ -21,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue"
+import { ref, defineProps, defineEmits } from "vue"
 
 import gateback from "@/assets/imgs/gate3_back.png";
 import gatelogo from "@/assets/imgs/gate3_logo.png"
@@ -41,13 +61,19 @@ import datebotVector1 from "@/assets/imgs/datebot_Vector_1.png";
 import datebotVector2 from "@/assets/imgs/datebot_Vector_2.png";
 import datebotVector3 from "@/assets/imgs/datebot_Vector_3.png";
 
-const props = defineProps({ keyword: String })
+const props = defineProps({ keyword: String, pageType: Number })
+const emits = defineEmits(["pageChage"])
 const config = ref(null)
+const isHoverL = ref(false)
+const isHoverR = ref(false)
 
 const setConfig = {
   gate: {
     protagonist: null,
     backfloor: gateback,
+    left: false,
+    right: true,
+    btnColor: "#6b0afe",
     footerlogo: gatelogo,
     deslogo: { width: "0.71rem", height: "0.64rem" },
     desColor: "#BD92FF",
@@ -57,6 +83,9 @@ const setConfig = {
   starland: {
     protagonist: null,
     backfloor: starlandBack,
+    left: true,
+    right: true,
+    btnColor: "#00b2ff",
     footerlogo: starlandLogo,
     deslogo: { width: "0.97rem", height: "0.66rem" },
     desColor: "#24B6D3",
@@ -66,6 +95,9 @@ const setConfig = {
   datebot: {
     protagonist: null,
     backfloor: datebotBack,
+    left: true,
+    right: false,
+    btnColor: "#6764f2",
     footerlogo: datebotLogo,
     deslogo: { width: "1.04rem", height: "0.7rem" },
     desColor: "#7875FF",
@@ -80,7 +112,20 @@ function renderGate(keyword) {
   config.value = { ...options }
 }
 
-function logohandle() {}
+function btnHover(status, type) {
+  if (type === "l") isHoverL.value = status
+  if (type === "r") isHoverR.value = status
+}
+
+function btnHandle(step) {
+  const goPage = props.pageType + step
+  if (![1, 2, 3].includes(goPage)) return
+  emits("pageChage", goPage)
+}
+
+function logohandle() {
+  // alert("123456")
+}
 
 </script>
 
@@ -95,7 +140,6 @@ article {
     position: absolute;
     left: 0;
     top: 0;
-    z-index: 1;
   }
   .backimg {
     z-index: -1;
@@ -105,8 +149,6 @@ article {
     width: 0.3rem;
     height: 0.3rem;
     border-radius: 50%;
-    border: #fff 1px solid;
-    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,7 +158,7 @@ article {
     transition: 0.5s;
     padding: 0 0.06rem;
     box-sizing: border-box;
-    z-index: 2;
+    translate: 0.5s;
   }
 
   button:hover {
