@@ -1,6 +1,9 @@
 <template>
   <article>
-    <img class="protagonist" alt="" v-lazy="config.protagonist">
+    <div class="protagonist" @click="logohandle">
+      <img ref="pngDom" alt="" v-lazy="config.protagonist" :style="config.backPosition">
+    </div>
+    <img class="floorImg" alt="" v-lazy="floorImg" :style="{ bottom: `${config.floorBottom}%` }">
     <img class="backimg" alt="" v-lazy="config.backfloor">
     <button
       class="left"
@@ -41,25 +44,28 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from "vue"
+import { ref, defineProps, defineEmits, onMounted, onUnmounted, resolveDirective } from "vue"
+import { getImgUrl, runPngAnimation } from "@/utils/index"
 
-import gateback from "@/assets/imgs/gate3_back.png";
-import gatelogo from "@/assets/imgs/gate3_logo.png"
-import gateVector1 from "@/assets/imgs/gate3_Vector_1.png"
-import gateVector2 from "@/assets/imgs/gate3_Vector_2.png"
-import gateVector3 from "@/assets/imgs/gate3_Vector_3.png"
+const floorImg = getImgUrl("../assets/imgs/floor.png")
 
-import starlandBack from "@/assets/imgs/starland_back.png";
-import starlandLogo from "@/assets/imgs/starland_logo.png";
-import starlandVector1 from "@/assets/imgs/starland_Vector_1.png";
-import starlandVector2 from "@/assets/imgs/starland_Vector_2.png";
-import starlandVector3 from "@/assets/imgs/starland_Vector_3.png";
+const gateback = getImgUrl("../assets/imgs/gate3_back.png")
+const gatelogo = getImgUrl("../assets/imgs/gate3_logo.png")
+const gateVector1 = getImgUrl("../assets/imgs/gate3_Vector_1.png")
+const gateVector2 = getImgUrl("../assets/imgs/gate3_Vector_2.png")
+const gateVector3 = getImgUrl("../assets/imgs/gate3_Vector_3.png")
 
-import datebotBack from "@/assets/imgs/datebot_back.png";
-import datebotLogo from "@/assets/imgs/datebot_logo.png";
-import datebotVector1 from "@/assets/imgs/datebot_Vector_1.png";
-import datebotVector2 from "@/assets/imgs/datebot_Vector_2.png";
-import datebotVector3 from "@/assets/imgs/datebot_Vector_3.png";
+const starlandBack = getImgUrl("../assets/imgs/starland_back.png")
+const starlandLogo = getImgUrl("../assets/imgs/starland_logo.png")
+const starlandVector1 = getImgUrl("../assets/imgs/starland_Vector_1.png")
+const starlandVector2 = getImgUrl("../assets/imgs/starland_Vector_2.png")
+const starlandVector3 = getImgUrl("../assets/imgs/starland_Vector_3.png")
+
+const datebotBack = getImgUrl("../assets/imgs/datebot_back.png")
+const datebotLogo = getImgUrl("../assets/imgs/datebot_logo.png")
+const datebotVector1 = getImgUrl("../assets/imgs/datebot_Vector_1.png")
+const datebotVector2 = getImgUrl("../assets/imgs/datebot_Vector_2.png")
+const datebotVector3 = getImgUrl("../assets/imgs/datebot_Vector_3.png")
 
 const props = defineProps({ keyword: String, pageType: Number })
 const emits = defineEmits(["pageChage"])
@@ -69,7 +75,13 @@ const isHoverR = ref(false)
 
 const setConfig = {
   gate: {
-    protagonist: null,
+    protagonist: getImgUrl("../assets/imgs/spider_1/spider1.png"),
+    backPosition: { left: "-150%", top: "-95%" },
+    animation: "spider_1",
+    speed: 1,
+    step: 26,
+    floorBottom: 34,
+    spiderSite: { top: "3%", left: "0" },
     backfloor: gateback,
     left: false,
     right: true,
@@ -82,6 +94,9 @@ const setConfig = {
   },
   starland: {
     protagonist: null,
+    animation: "spider_2",
+    floorBottom: 30,
+    spiderSite: { top: "3%", left: "0" },
     backfloor: starlandBack,
     left: true,
     right: true,
@@ -94,6 +109,9 @@ const setConfig = {
   },
   datebot: {
     protagonist: null,
+    animation: "spider_3",
+    floorBottom: 30,
+    spiderSite: { top: "3%", left: "0" },
     backfloor: datebotBack,
     left: true,
     right: false,
@@ -123,8 +141,22 @@ function btnHandle(step) {
   emits("pageChage", goPage)
 }
 
+const pngDom = ref(null)
+const timer = ref(null)
+
+onMounted(() => {
+  let options = setConfig[props.keyword]
+  if (timer.value) clearInterval(timer.value)
+  timer.value = runPngAnimation(pngDom.value, `../assets/imgs/${options.animation}/spider`, options.speed, options.step)
+})
+
+onUnmounted(() => {
+  timer.value && clearInterval(timer.value)
+  timer.value = null
+})
+
 function logohandle() {
-  // alert("123456")
+  alert("123456")
 }
 
 </script>
@@ -138,11 +170,26 @@ article {
   justify-content: center;
   .protagonist {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 35%;
+    width: 25%;
+    img {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      z-index: -1;
+    }
+  }
+  .floorImg {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: -1;
   }
   .backimg {
-    z-index: -1;
+    z-index: -2;
   }
 
   button {

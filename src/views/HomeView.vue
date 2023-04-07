@@ -2,7 +2,7 @@
   <div class="home" ref="homeDom">
     <img class="backimg" alt="back" v-lazy="homeback">
     <article>
-      <img id="cube" alt="matapace" v-lazy="cubePage">
+      <img id="cube" alt="matapace" ref="pngDom" src="~@/assets/imgs/homeAnimation/animation (1).png">
       <div class="line"></div>
       <img class="spider" alt="spider" v-lazy="homedislogo">
       <div class="description">web3.0 professional platform focusing on providing user growth and market development, which makes everyone an undefined market pioneer</div>
@@ -16,16 +16,28 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, onUnmounted } from "vue"
+import { runPngAnimation } from "@/utils/index"
 
 import homeback from "@/assets/imgs/homeback.webp"
-import cubePage from "@/assets/imgs/homeAnimation/animation (1).webp"
 import homedislogo from "@/assets/imgs/homedislogo.webp"
 import home_Vector_1 from "@/assets/imgs/home_Vector_1.webp"
 import home_Vector_2 from "@/assets/imgs/home_Vector_2.webp"
 import home_Vector_3 from "@/assets/imgs/home_Vector_3.webp"
 
 const homeDom = ref(null)
+const pngDom = ref(null)
+const timer = ref(null)
+
+onMounted(() => {
+  if (timer.value) clearInterval(timer.value)
+  timer.value = runPngAnimation(pngDom.value, "../assets/imgs/homeAnimation/animation", 10, 32)
+})
+
+onUnmounted(() => {
+  timer.value && clearInterval(timer.value)
+  timer.value = null
+})
 
 </script>
 
